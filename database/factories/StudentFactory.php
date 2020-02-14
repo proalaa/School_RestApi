@@ -11,7 +11,7 @@ $factory->define(Student::class, function (Faker $faker) {
         'first_name'=>$faker->firstName,
         'last_name'=> $faker->lastName,
         'birth_date'=>$faker->dateTimeBetween('-20 years' , '-19 years')->format('Y-m-d'),
-        'phone_number'=>$faker->phoneNumber,
+        'phone_number'=>$faker->e164PhoneNumber,
         'total_grade'=>$faker->numberBetween(450,800)
     ];
 });

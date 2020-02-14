@@ -27,36 +27,48 @@ class StudentsController extends Controller
         return new StudentsResource($student);
     }
 
-
-    public function store()
+    /**
+     * @return StudentsResource
+     */
+    public function store(Request $request):StudentsResource
     {
-        $data = $this->Forvalidation();
-        Student::create($data);
+        $request->validate([
+            'first_name' =>'required',
+            'last_name'=>'required',
+            'phone_number'=>'bail|nullable|integer',
+            'birth_date' => 'required',
+            'total_grade'=>'required|integer'
+        ]);
+
+
+        $data = Student::create($request->all());
+        return new StudentsResource($data);
+    }
+
+    /**
+     * @param Request $request
+     * @param Student $student
+     * @return StudentsResource
+     */
+    public function update(Request $request,Student $student):StudentsResource
+    {
+
+        $student->update($request->all());
+
+        return new StudentsResource($student);
     }
 
     /**
      * @param Student $student
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function update(Student $student)
-    {
-        $data = $this->Forvalidation();
-        $student->update($data);
-    }
-
-
     public function destroy(Student $student)
     {
         $student->delete();
+
+        return response()->json();
     }
 
-    private function Forvalidation()
-    {
-        request()->validate([
-            'first_name' =>'required',
-            'last_name'=>'required',
-            'phone_number'=>'integer',
-            'birth_date' => 'required',
-            'total_grade'=>'required|integer'
-        ]);
-    }
+
 }
